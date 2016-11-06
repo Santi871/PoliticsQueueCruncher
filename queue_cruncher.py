@@ -132,6 +132,7 @@ class GUI(QtGui.QMainWindow, gui_main.Ui_MainWindow):
         self.pushButton_17.setEnabled(False)
         self.tableWidget_2.setRowCount(0)
         self.current_listed_posts = dict()
+        self.tableWidget_2.setSelectionMode(QtGui.QAbstractItemView.NoSelection)
         filters = self.lineEdit.text().split(',')
 
         post_type = 0
@@ -159,6 +160,7 @@ class GUI(QtGui.QMainWindow, gui_main.Ui_MainWindow):
         self.pushButton_17.setEnabled(True)
         self.pushButton_17.setText("Refresh")
         self.pushButton_22.setEnabled(False)
+        self.tableWidget_2.setSelectionMode(QtGui.QAbstractItemView.SingleSelection)
 
     def reports_feed(self):
         post_type = 0
@@ -233,6 +235,8 @@ class GUI(QtGui.QMainWindow, gui_main.Ui_MainWindow):
             self.webView_2.show()
 
     def highlight_text(self, pattern):
+        if pattern == "":
+            return
         pattern = pattern.split(',')
         pattern = '|'.join(pattern)
         cursor = self.textEdit_6.textCursor()
