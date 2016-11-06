@@ -33,6 +33,20 @@ class AlreadyDone(Exception):
     pass
 
 
+class GetArticleTitleThread(QtCore.QThread):
+    def __init__(self, post):
+        QtCore.QThread.__init__(self)
+        self.post = post
+
+    def __del__(self):
+        self.wait()
+
+    def run(self):
+        webpage = requests.get(self.post.url).text
+        soup = BeautifulSoup(webpage, "html.parser")
+        self.emit(QtCore.SIGNAL('add_title(PyQt_PyObject)'), soup.title.string)
+
+
 class LiveModqueueFeedThread(QtCore.QThread):
     def __init__(self, filters_line, post_type, check_box):
         QtCore.QThread.__init__(self)
@@ -219,8 +233,9 @@ class GUI(QtGui.QMainWindow, gui_main.Ui_MainWindow):
             self.tabWidget.setTabEnabled(0, True)
             self.tabWidget.setCurrentIndex(0)
             self.tabWidget.setTabEnabled(1, False)
-            thread = Thread(target=self.get_article_title, kwargs={'data': data})
-            thread.start()
+            self.title_thread = GetArticleTitleThread(data)
+            self.connect(self.title_thread, QtCore.SIGNAL('add_title(PyQt_PyObject)'), self.set_article_title)
+            self.title_thread.start()
             self.show_webpage(data.url)
             self.lineEdit_6.setText(data.domain)
             self.lineEdit_2.setText(data.title)
@@ -264,10 +279,8 @@ class GUI(QtGui.QMainWindow, gui_main.Ui_MainWindow):
         data = self.get_selected_row_data()
         webbrowser.open("https://reddit.com/user/" + data.author.name)
 
-    def get_article_title(self, data):
-        webpage = requests.get(data.url).text
-        soup = BeautifulSoup(webpage, "html.parser")
-        self.lineEdit_7.setText(soup.title.string)
+    def set_article_title(self, title):
+        self.lineEdit_7.setText(title)
 
     def show_webpage(self, url):
         self.webView.load(QtCore.QUrl(url))
