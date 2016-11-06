@@ -49,7 +49,7 @@ def own_thread(func):
             kwargs = None
         bot_obj = args[0]
 
-        r = praw.Reddit(user_agent="windows:PoliticsQueueCruncher v0.1 by /u/Santi871")
+        r = praw.Reddit(user_agent="windows:PoliticsQueueCruncher v0.2 by /u/Santi871")
         o = OAuth2Util.OAuth2Util(r)
         r.config.api_request_delay = 1
 

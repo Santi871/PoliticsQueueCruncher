@@ -12,6 +12,40 @@ import time
 import requests
 
 
+def create_reddit():
+    r = praw.Reddit(user_agent="windows:PoliticsQueueCruncher v0.2 by /u/Santi871")
+    o = OAuth2Util(r)
+    r.config.api_request_delay = 1
+    o.refresh()
+    return r, o
+
+
+class ModqueueFetcherThread(QtCore.QThread):
+    def __init__(self, thread_qc, post_type):
+        QtCore.QThread.__init__(self)
+        self.qc = thread_qc
+        self.post_type = post_type
+
+    def __del__(self):
+        self.wait()
+
+    def run(self):
+        r, o = create_reddit()
+
+        reports = r.get_reports('politics', limit=None)
+        filters = list()
+
+        starts_with = 't'
+        if self.post_type == 1:
+            starts_with = 't3'
+        elif self.post_type == 2:
+            starts_with = 't1'
+
+        for post in reports:
+            if post.fullname.startswith(starts_with) and self.qc.check_filters(filters, post):
+                self.emit(QtCore.SIGNAL('add_post(PyQt_PyObject)'), post)
+
+
 class GUI(QtGui.QMainWindow, gui_main.Ui_MainWindow):
 
     def __init__(self, queue_cruncher, parent=None):
@@ -30,14 +64,26 @@ class GUI(QtGui.QMainWindow, gui_main.Ui_MainWindow):
         self.checkBox.clicked.connect(self.reports_feed)
 
     def create_populate_reports_list_thread(self):
+        self.label_11.setText("Queue size: 0")
+        self.pushButton_17.setText("Refreshing...")
+        self.pushButton_17.setEnabled(False)
+        self.tableWidget_2.setRowCount(0)
         self.current_listed_posts = dict()
+
         post_type = 0
         if self.radioButton_2.isChecked():
             post_type = 2
         if self.radioButton.isChecked():
             post_type = 1
 
-        self.qc.get_reports(post_type=post_type)
+        fetcher_thread = ModqueueFetcherThread(self.qc, post_type)
+        self.connect(fetcher_thread, QtCore.SIGNAL("add_post(PyQt_PyObject)"), self.add_post)
+        self.connect(fetcher_thread, QtCore.SIGNAL("finished()"), self.done_fetching_queue)
+        fetcher_thread.start()
+
+    def done_fetching_queue(self):
+        self.pushButton_17.setEnabled(True)
+        self.pushButton_17.setText("Refresh")
 
     def reports_feed(self):
         post_type = 0
@@ -52,6 +98,26 @@ class GUI(QtGui.QMainWindow, gui_main.Ui_MainWindow):
         item = self.tableWidget_2.selectionModel().selectedRows()[0]
         data = self.tableWidget_2.model().index(item.row(), 3).data()
         return self.current_listed_posts.get(data, None)
+
+    def add_post(self, post, position=None):
+        if post.author is None:
+            return
+        if position is None:
+            position = self.tableWidget_2.rowCount()
+
+        self.tableWidget_2.insertRow(position)
+        timestamp = datetime.datetime.fromtimestamp(post.created).strftime("%Y-%m-%d %H:%M:%S")
+
+        if post.fullname.startswith("t1"):
+            post_type = "Comment"
+        else:
+            post_type = "Submission"
+
+        self.tableWidget_2.setItem(position, 0, QtGui.QTableWidgetItem(post_type))
+        self.tableWidget_2.setItem(position, 1, QtGui.QTableWidgetItem(post.author.name))
+        self.tableWidget_2.setItem(position, 2, QtGui.QTableWidgetItem(timestamp))
+        self.tableWidget_2.setItem(position, 3, QtGui.QTableWidgetItem(post.id))
+        self.current_listed_posts[post.id] = post
 
     def select_post(self):
         self.lineEdit_6.clear()
@@ -106,7 +172,7 @@ class GUI(QtGui.QMainWindow, gui_main.Ui_MainWindow):
 class QueueCruncher:
 
     def __init__(self):
-        self.r = praw.Reddit(user_agent="windows:PoliticsQueueCruncher v0.1 by /u/Santi871")
+        self.r = praw.Reddit(user_agent="windows:PoliticsQueueCruncher v0.2 by /u/Santi871")
         self._authenticate()
         self.already_done = list()
         self.gui = None
@@ -118,10 +184,30 @@ class QueueCruncher:
 
     @staticmethod
     def check_filters(filters, post):
+        if not filters:
+            return True
+
         try:
             return any(word.lower() in post.title.lower() for word in filters)
         except AttributeError:
             return any(word.lower() in post.body.lower() for word in filters)
+
+    def get_reports_generator(self, post_type):
+        r, o = create_reddit()
+
+        reports = r.get_reports('politics', limit=None)
+        filters = list()
+
+        starts_with = 't'
+        if post_type == 1:
+            starts_with = 't3'
+        elif post_type == 2:
+            starts_with = 't1'
+
+        for post in reports:
+            print("hi")
+            # if post.fullname.startswith(starts_with) and self.check_filters(filters, post):
+            yield post
 
     @own_thread
     def get_reports(self, r, o, post_type):
