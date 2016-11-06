@@ -4,7 +4,6 @@ from gui import gui_main
 from PyQt4 import QtGui, QtCore
 import sys
 import datetime
-from bot_threading import own_thread
 import webbrowser
 from bs4 import BeautifulSoup
 from threading import Thread
@@ -20,10 +19,54 @@ def create_reddit():
     return r, o
 
 
-class ModqueueFetcherThread(QtCore.QThread):
-    def __init__(self, thread_qc, post_type):
+def check_filters(filters, post):
+    if not filters:
+        return True
+
+    try:
+        return any(word.lower() in post.title.lower() for word in filters)
+    except AttributeError:
+        return any(word.lower() in post.body.lower() for word in filters)
+
+
+class AlreadyDone(Exception):
+    pass
+
+
+class LiveModqueueFeedThread(QtCore.QThread):
+    def __init__(self, filters_line, post_type, check_box):
         QtCore.QThread.__init__(self)
-        self.qc = thread_qc
+        self.filters_line = filters_line
+        self.post_type = post_type
+        self.check_box = check_box
+
+    def __del__(self):
+        self.wait()
+
+    def run(self):
+        r, o = create_reddit()
+
+        starts_with = 't'
+        if self.post_type == 1:
+            starts_with = 't3'
+        elif self.post_type == 2:
+            starts_with = 't1'
+
+        while self.check_box.isChecked():
+            filters = self.filters_line.text().split(',')
+            o.refresh()
+            reports = r.get_reports('politics', limit=50, fetch=True)
+
+            for post in reports:
+                if post.fullname.startswith(starts_with) and check_filters(filters, post):
+                    self.emit(QtCore.SIGNAL('add_feed_post(PyQt_PyObject,PyQt_PyObject)'), post, 0)
+            time.sleep(5)
+
+
+class ModqueueFetcherThread(QtCore.QThread):
+    def __init__(self, filters, post_type):
+        QtCore.QThread.__init__(self)
+        self.filters = filters
         self.post_type = post_type
 
     def __del__(self):
@@ -33,7 +76,6 @@ class ModqueueFetcherThread(QtCore.QThread):
         r, o = create_reddit()
 
         reports = r.get_reports('politics', limit=None)
-        filters = list()
 
         starts_with = 't'
         if self.post_type == 1:
@@ -42,19 +84,21 @@ class ModqueueFetcherThread(QtCore.QThread):
             starts_with = 't1'
 
         for post in reports:
-            if post.fullname.startswith(starts_with) and self.qc.check_filters(filters, post):
+            if post.fullname.startswith(starts_with) and check_filters(self.filters, post):
                 self.emit(QtCore.SIGNAL('add_post(PyQt_PyObject)'), post)
+                post.o = o
 
 
 class GUI(QtGui.QMainWindow, gui_main.Ui_MainWindow):
 
-    def __init__(self, queue_cruncher, parent=None):
+    def __init__(self,parent=None):
         super(GUI, self).__init__(parent)
         self.setupUi(self)
-        self.qc = queue_cruncher
-        self.qc.gui = self
-        self.current_listed_posts = None
-        self.create_populate_reports_list_thread()
+        self.fetcher_thread = None
+        self.feed_thread = None
+        self.already_done = list()
+        self.current_listed_posts = dict()
+        # self.create_populate_reports_list_thread()
         self.pushButton_17.clicked.connect(self.create_populate_reports_list_thread)
         self.tableWidget_2.setColumnCount(4)
         self.statusbar.showMessage("Ready.")
@@ -62,13 +106,16 @@ class GUI(QtGui.QMainWindow, gui_main.Ui_MainWindow):
         self.pushButton_15.clicked.connect(self.open_user_profile)
         self.pushButton_21.clicked.connect(self.open_link)
         self.checkBox.clicked.connect(self.reports_feed)
+        self.cur_queue_size = 0
 
     def create_populate_reports_list_thread(self):
+        self.cur_queue_size = 0
         self.label_11.setText("Queue size: 0")
         self.pushButton_17.setText("Refreshing...")
         self.pushButton_17.setEnabled(False)
         self.tableWidget_2.setRowCount(0)
         self.current_listed_posts = dict()
+        filters = self.lineEdit.text().split(',')
 
         post_type = 0
         if self.radioButton_2.isChecked():
@@ -76,10 +123,18 @@ class GUI(QtGui.QMainWindow, gui_main.Ui_MainWindow):
         if self.radioButton.isChecked():
             post_type = 1
 
-        fetcher_thread = ModqueueFetcherThread(self.qc, post_type)
-        self.connect(fetcher_thread, QtCore.SIGNAL("add_post(PyQt_PyObject)"), self.add_post)
-        self.connect(fetcher_thread, QtCore.SIGNAL("finished()"), self.done_fetching_queue)
-        fetcher_thread.start()
+        self.fetcher_thread = ModqueueFetcherThread(filters, post_type)
+        self.connect(self.fetcher_thread, QtCore.SIGNAL("add_post(PyQt_PyObject)"), self.add_post)
+        self.connect(self.fetcher_thread, QtCore.SIGNAL("finished()"), self.done_fetching_queue)
+        self.connect(self.fetcher_thread, QtCore.SIGNAL('update_queue_length(PyQt_PyObject)'), self.update_queue_size)
+        self.fetcher_thread.start()
+
+    def update_queue_size(self, num, add_mode=False):
+        if add_mode:
+            self.cur_queue_size += num
+        else:
+            self.cur_queue_size = num
+        self.label_11.setText("Queue size: " + str(self.cur_queue_size))
 
     def done_fetching_queue(self):
         self.pushButton_17.setEnabled(True)
@@ -92,14 +147,21 @@ class GUI(QtGui.QMainWindow, gui_main.Ui_MainWindow):
         if self.radioButton.isChecked():
             post_type = 1
 
-        self.qc.update_reports_list(post_type=post_type)
+        self.feed_thread = LiveModqueueFeedThread(self.lineEdit, post_type, self.checkBox)
+        self.connect(self.feed_thread, QtCore.SIGNAL("add_feed_post(PyQt_PyObject,PyQt_PyObject)"), self.add_post)
+        self.connect(self.feed_thread, QtCore.SIGNAL('update_queue_length(PyQt_PyObject)'), self.update_queue_size)
+        self.feed_thread.start()
 
     def get_selected_row_data(self):
         item = self.tableWidget_2.selectionModel().selectedRows()[0]
         data = self.tableWidget_2.model().index(item.row(), 3).data()
-        return self.current_listed_posts.get(data, None)
+        data = self.current_listed_posts.get(data, None)
+        return data
 
     def add_post(self, post, position=None):
+        if post.id in self.already_done:
+            return
+
         if post.author is None:
             return
         if position is None:
@@ -118,6 +180,8 @@ class GUI(QtGui.QMainWindow, gui_main.Ui_MainWindow):
         self.tableWidget_2.setItem(position, 2, QtGui.QTableWidgetItem(timestamp))
         self.tableWidget_2.setItem(position, 3, QtGui.QTableWidgetItem(post.id))
         self.current_listed_posts[post.id] = post
+        self.update_queue_size(1, add_mode=True)
+        self.already_done.append(post.id)
 
     def select_post(self):
         self.lineEdit_6.clear()
@@ -169,122 +233,13 @@ class GUI(QtGui.QMainWindow, gui_main.Ui_MainWindow):
         return self.lineEdit.text().split(',')
 
 
-class QueueCruncher:
-
-    def __init__(self):
-        self.r = praw.Reddit(user_agent="windows:PoliticsQueueCruncher v0.2 by /u/Santi871")
-        self._authenticate()
-        self.already_done = list()
-        self.gui = None
-
-    def _authenticate(self):
-        o = OAuth2Util(self.r)
-        o.refresh(force=True)
-        self.r.config.api_request_delay = 1
-
-    @staticmethod
-    def check_filters(filters, post):
-        if not filters:
-            return True
-
-        try:
-            return any(word.lower() in post.title.lower() for word in filters)
-        except AttributeError:
-            return any(word.lower() in post.body.lower() for word in filters)
-
-    def get_reports_generator(self, post_type):
-        r, o = create_reddit()
-
-        reports = r.get_reports('politics', limit=None)
-        filters = list()
-
-        starts_with = 't'
-        if post_type == 1:
-            starts_with = 't3'
-        elif post_type == 2:
-            starts_with = 't1'
-
-        for post in reports:
-            print("hi")
-            # if post.fullname.startswith(starts_with) and self.check_filters(filters, post):
-            yield post
-
-    @own_thread
-    def get_reports(self, r, o, post_type):
-        self.gui.label_11.setText("Queue size: 0")
-        self.gui.pushButton_17.setText("Refreshing...")
-        self.gui.pushButton_17.setEnabled(False)
-        self.gui.tableWidget_2.setRowCount(0)
-        reports = r.get_reports('politics', limit=None)
-        filters = self.gui.get_reports_filter()
-        queue_num = 0
-
-        starts_with = 't'
-        if post_type == 1:
-            starts_with = 't3'
-        elif post_type == 2:
-            starts_with = 't1'
-
-        for post in reports:
-            if post.fullname.startswith(starts_with) and self.check_filters(filters, post):
-                self.add_post(post)
-                self.already_done.append(post.id)
-                queue_num += 1
-                self.gui.label_11.setText("Queue size: " + str(queue_num))
-
-        self.gui.pushButton_17.setEnabled(True)
-        self.gui.pushButton_17.setText("Refresh")
-
-    @own_thread
-    def update_reports_list(self, r, o, post_type):
-        starts_with = 't'
-        if post_type == 1:
-            starts_with = 't3'
-        elif post_type == 2:
-            starts_with = 't1'
-
-        while self.gui.checkBox.isChecked():
-            filters = self.gui.get_reports_filter()
-            o.refresh()
-            reports = r.get_reports('politics', limit=50, fetch=True)
-
-            for post in reports:
-                if post.fullname.startswith(starts_with) and post.id not in self.already_done and \
-                        self.check_filters(filters, post):
-                    self.add_post(post, position=0)
-                    self.already_done.append(post.id)
-            time.sleep(5)
-
-    def add_post(self, post, position=None):
-
-        if post.author is None:
-            return
-        if position is None:
-            position = self.gui.tableWidget_2.rowCount()
-
-        self.gui.tableWidget_2.insertRow(position)
-        timestamp = datetime.datetime.fromtimestamp(post.created).strftime("%Y-%m-%d %H:%M:%S")
-
-        if post.fullname.startswith("t1"):
-            post_type = "Comment"
-        else:
-            post_type = "Submission"
-
-        self.gui.tableWidget_2.setItem(position, 0, QtGui.QTableWidgetItem(post_type))
-        self.gui.tableWidget_2.setItem(position, 1, QtGui.QTableWidgetItem(post.author.name))
-        self.gui.tableWidget_2.setItem(position, 2, QtGui.QTableWidgetItem(timestamp))
-        self.gui.tableWidget_2.setItem(position, 3, QtGui.QTableWidgetItem(post.id))
-        self.gui.current_listed_posts[post.id] = post
-
-
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     splash_pix = QtGui.QPixmap('splash_loading.png')
     splash = QtGui.QSplashScreen(splash_pix, QtCore.Qt.WindowStaysOnTopHint)
     splash.setMask(splash_pix.mask())
     splash.show()
-    qc = QueueCruncher()
-    form = GUI(queue_cruncher=qc)
+    form = GUI()
     form.show()
     splash.finish(form)
     app.exec_()
