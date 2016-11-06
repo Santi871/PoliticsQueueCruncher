@@ -13,7 +13,7 @@ import requests
 
 def create_reddit():
     r = praw.Reddit(user_agent="windows:PoliticsQueueCruncher v0.2 by /u/Santi871")
-    o = OAuth2Util(r)
+    o = OAuth2Util(r, configfile='praw.ini')
     r.config.api_request_delay = 1
     o.refresh()
     return r, o
@@ -112,7 +112,6 @@ class GUI(QtGui.QMainWindow, gui_main.Ui_MainWindow):
         self.tableWidget_2.itemSelectionChanged.connect(self.select_post)
         self.pushButton_15.clicked.connect(self.open_user_profile)
         self.pushButton_21.clicked.connect(self.open_link)
-        self.pushButton_22.setEnabled(False)
         self.checkBox.clicked.connect(self.reports_feed)
         self.cur_queue_size = 0
 
@@ -229,8 +228,29 @@ class GUI(QtGui.QMainWindow, gui_main.Ui_MainWindow):
             self.tabWidget.setCurrentIndex(1)
             self.tabWidget.setTabEnabled(0, False)
             self.textEdit_6.setText(data.body)
-            self.webView_2.load(QtCore.QUrl(data.permalink + "?context=10000"))
+            self.highlight_text(self.lineEdit_38.text())
+            self.webView_2.load(QtCore.QUrl(data.permalink + "?context=2"))
             self.webView_2.show()
+
+    def highlight_text(self, pattern):
+        pattern = pattern.split(',')
+        pattern = '|'.join(pattern)
+        cursor = self.textEdit_6.textCursor()
+        text_format = QtGui.QTextCharFormat()
+        text_format.setBackground(QtGui.QBrush(QtGui.QColor(254, 208, 0)))
+        regex = QtCore.QRegExp(pattern)
+        regex.setCaseSensitivity(False)
+
+        pos = 0
+        index = regex.indexIn(self.textEdit_6.toPlainText(), pos)
+        while index != -1:
+            # Select the matched text and apply the desired format
+            cursor.setPosition(index)
+            cursor.movePosition(QtGui.QTextCursor.EndOfWord, 1)
+            cursor.mergeCharFormat(text_format)
+            # Move to the next match
+            pos = index + regex.matchedLength()
+            index = regex.indexIn(self.textEdit_6.toPlainText(), pos)
 
     def open_link(self):
         data = self.get_selected_row_data()

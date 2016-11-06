@@ -50,7 +50,7 @@ def own_thread(func):
         bot_obj = args[0]
 
         r = praw.Reddit(user_agent="windows:PoliticsQueueCruncher v0.2 by /u/Santi871")
-        o = OAuth2Util.OAuth2Util(r)
+        o = OAuth2Util.OAuth2Util(r, configfile='praw.ini')
         r.config.api_request_delay = 1
 
         if kwargs is not None:
