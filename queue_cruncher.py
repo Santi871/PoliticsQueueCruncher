@@ -59,6 +59,7 @@ class LiveModqueueFeedThread(QtCore.QThread):
 
             for post in reports:
                 if post.fullname.startswith(starts_with) and check_filters(filters, post):
+                    post.o = o
                     self.emit(QtCore.SIGNAL('add_feed_post(PyQt_PyObject,PyQt_PyObject)'), post, 0)
             time.sleep(5)
 
@@ -68,6 +69,7 @@ class ModqueueFetcherThread(QtCore.QThread):
         QtCore.QThread.__init__(self)
         self.filters = filters
         self.post_type = post_type
+        self.halt_signal = False
 
     def __del__(self):
         self.wait()
@@ -84,9 +86,14 @@ class ModqueueFetcherThread(QtCore.QThread):
             starts_with = 't1'
 
         for post in reports:
-            if post.fullname.startswith(starts_with) and check_filters(self.filters, post):
-                self.emit(QtCore.SIGNAL('add_post(PyQt_PyObject)'), post)
+            if post.fullname.startswith(starts_with) and check_filters(self.filters, post) and not self.halt_signal:
                 post.o = o
+                self.emit(QtCore.SIGNAL('add_post(PyQt_PyObject)'), post)
+            elif self.halt_signal:
+                return
+
+    def halt(self):
+        self.halt_signal = True
 
 
 class GUI(QtGui.QMainWindow, gui_main.Ui_MainWindow):
@@ -98,17 +105,28 @@ class GUI(QtGui.QMainWindow, gui_main.Ui_MainWindow):
         self.feed_thread = None
         self.already_done = list()
         self.current_listed_posts = dict()
-        # self.create_populate_reports_list_thread()
+        self.create_populate_reports_list_thread()
         self.pushButton_17.clicked.connect(self.create_populate_reports_list_thread)
         self.tableWidget_2.setColumnCount(4)
         self.statusbar.showMessage("Ready.")
         self.tableWidget_2.itemSelectionChanged.connect(self.select_post)
         self.pushButton_15.clicked.connect(self.open_user_profile)
         self.pushButton_21.clicked.connect(self.open_link)
+        self.pushButton_22.setEnabled(False)
         self.checkBox.clicked.connect(self.reports_feed)
         self.cur_queue_size = 0
 
+    def auth_reddit_thread(self):
+        thread = Thread(target=self.auth_reddit)
+        thread.start()
+
+    @staticmethod
+    def auth_reddit():
+        _, o = create_reddit()
+        o.refresh(force=True)
+
     def create_populate_reports_list_thread(self):
+        self.already_done = list()
         self.cur_queue_size = 0
         self.label_11.setText("Queue size: 0")
         self.pushButton_17.setText("Refreshing...")
@@ -128,6 +146,8 @@ class GUI(QtGui.QMainWindow, gui_main.Ui_MainWindow):
         self.connect(self.fetcher_thread, QtCore.SIGNAL("finished()"), self.done_fetching_queue)
         self.connect(self.fetcher_thread, QtCore.SIGNAL('update_queue_length(PyQt_PyObject)'), self.update_queue_size)
         self.fetcher_thread.start()
+        self.pushButton_22.setEnabled(True)
+        self.pushButton_22.clicked.connect(self.fetcher_thread.halt)
 
     def update_queue_size(self, num, add_mode=False):
         if add_mode:
@@ -139,6 +159,7 @@ class GUI(QtGui.QMainWindow, gui_main.Ui_MainWindow):
     def done_fetching_queue(self):
         self.pushButton_17.setEnabled(True)
         self.pushButton_17.setText("Refresh")
+        self.pushButton_22.setEnabled(False)
 
     def reports_feed(self):
         post_type = 0
@@ -207,8 +228,7 @@ class GUI(QtGui.QMainWindow, gui_main.Ui_MainWindow):
             self.tabWidget.setTabEnabled(1, True)
             self.tabWidget.setCurrentIndex(1)
             self.tabWidget.setTabEnabled(0, False)
-            self.textEdit.setText(data.body)
-            self.lineEdit_9.setText(data.submission.title)
+            self.textEdit_6.setText(data.body)
             self.webView_2.load(QtCore.QUrl(data.permalink + "?context=10000"))
             self.webView_2.show()
 
@@ -235,11 +255,7 @@ class GUI(QtGui.QMainWindow, gui_main.Ui_MainWindow):
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
-    splash_pix = QtGui.QPixmap('splash_loading.png')
-    splash = QtGui.QSplashScreen(splash_pix, QtCore.Qt.WindowStaysOnTopHint)
-    splash.setMask(splash_pix.mask())
-    splash.show()
     form = GUI()
     form.show()
-    splash.finish(form)
+    form.auth_reddit_thread()
     app.exec_()
