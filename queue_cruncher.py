@@ -120,12 +120,14 @@ class GUI(QtGui.QMainWindow, gui_main.Ui_MainWindow):
         self.already_done = list()
         self.current_listed_posts = dict()
         self.create_populate_reports_list_thread()
-        self.pushButton_17.clicked.connect(self.create_populate_reports_list_thread)
         self.tableWidget_2.setColumnCount(4)
         self.statusbar.showMessage("Ready.")
         self.tableWidget_2.itemSelectionChanged.connect(self.select_post)
         self.pushButton_15.clicked.connect(self.open_user_profile)
         self.pushButton_21.clicked.connect(self.open_link)
+        self.radioButton.clicked.connect(self.create_populate_reports_list_thread)
+        self.radioButton_2.clicked.connect(self.create_populate_reports_list_thread)
+        self.radioButton_3.clicked.connect(self.create_populate_reports_list_thread)
         self.checkBox.clicked.connect(self.reports_feed)
         self.cur_queue_size = 0
 
@@ -139,11 +141,12 @@ class GUI(QtGui.QMainWindow, gui_main.Ui_MainWindow):
         o.refresh(force=True)
 
     def create_populate_reports_list_thread(self):
+        self.radioButton.setEnabled(False)
+        self.radioButton_2.setEnabled(False)
+        self.radioButton_3.setEnabled(False)
         self.already_done = list()
         self.cur_queue_size = 0
         self.label_11.setText("Queue size: 0")
-        self.pushButton_17.setText("Refreshing...")
-        self.pushButton_17.setEnabled(False)
         self.tableWidget_2.setRowCount(0)
         self.current_listed_posts = dict()
         self.tableWidget_2.setSelectionMode(QtGui.QAbstractItemView.NoSelection)
@@ -171,8 +174,9 @@ class GUI(QtGui.QMainWindow, gui_main.Ui_MainWindow):
         self.label_11.setText("Queue size: " + str(self.cur_queue_size))
 
     def done_fetching_queue(self):
-        self.pushButton_17.setEnabled(True)
-        self.pushButton_17.setText("Refresh")
+        self.radioButton.setEnabled(True)
+        self.radioButton_2.setEnabled(True)
+        self.radioButton_3.setEnabled(True)
         self.pushButton_22.setEnabled(False)
         self.tableWidget_2.setSelectionMode(QtGui.QAbstractItemView.SingleSelection)
 
