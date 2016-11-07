@@ -1,0 +1,1208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1579</width>
+    <height>819</height>
+   </rect>
+  </property>
+  <property name="font">
+   <font>
+    <family>MS Shell Dlg 2</family>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout_5">
+    <item row="0" column="0">
+     <widget class="QSplitter" name="splitter">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <widget class="QWidget" name="layoutWidget">
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="QFrame" name="frame_2">
+          <property name="frameShape">
+           <enum>QFrame::Box</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <layout class="QGridLayout" name="gridLayout">
+           <item row="0" column="0">
+            <layout class="QHBoxLayout" name="horizontalLayout_30">
+             <item>
+              <layout class="QVBoxLayout" name="verticalLayout">
+               <item>
+                <widget class="QRadioButton" name="radioButton">
+                 <property name="text">
+                  <string>Submissions only</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="radioButton_2">
+                 <property name="text">
+                  <string>Comments only</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QRadioButton" name="radioButton_3">
+                 <property name="text">
+                  <string>Both</string>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QVBoxLayout" name="verticalLayout_2">
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout_17">
+                 <item>
+                  <widget class="QPushButton" name="pushButton_17">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string>Refresh</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="pushButton_22">
+                   <property name="maximumSize">
+                    <size>
+                     <width>25</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="text">
+                    <string>X</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="lineEdit">
+                 <property name="placeholderText">
+                  <string>filter (comma-separated)</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="horizontalLayout">
+                 <item>
+                  <widget class="QCheckBox" name="checkBox">
+                   <property name="text">
+                    <string>Feed mode</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_11">
+                   <property name="frameShape">
+                    <enum>QFrame::Box</enum>
+                   </property>
+                   <property name="text">
+                    <string>Queue size: 0</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </item>
+          </layout>
+          <zorder></zorder>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTableWidget" name="tableWidget_2">
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::SingleSelection</enum>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
+          </property>
+          <property name="sortingEnabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QTabWidget" name="tabWidget">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>500</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16016006</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="currentIndex">
+        <number>1</number>
+       </property>
+       <widget class="QWidget" name="tab">
+        <attribute name="title">
+         <string>Submission</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_2">
+         <item row="0" column="0">
+          <layout class="QVBoxLayout" name="verticalLayout_13">
+           <item>
+            <widget class="QFrame" name="frame_4">
+             <property name="frameShape">
+              <enum>QFrame::Box</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_7">
+              <item row="1" column="0">
+               <layout class="QHBoxLayout" name="horizontalLayout_15">
+                <item>
+                 <layout class="QVBoxLayout" name="verticalLayout_8">
+                  <item>
+                   <layout class="QHBoxLayout" name="horizontalLayout_2">
+                    <item>
+                     <widget class="QPushButton" name="pushButton_21">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="text">
+                       <string>Open link</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="pushButton_28">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="text">
+                       <string>Open post</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item>
+                   <layout class="QHBoxLayout" name="horizontalLayout_3">
+                    <item>
+                     <widget class="QPushButton" name="pushButton_19">
+                      <property name="text">
+                       <string>Check for reposts</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QVBoxLayout" name="verticalLayout_4">
+                  <item>
+                   <layout class="QHBoxLayout" name="horizontalLayout_16">
+                    <item>
+                     <widget class="QLabel" name="label_2">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>150</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="frameShape">
+                       <enum>QFrame::Box</enum>
+                      </property>
+                      <property name="text">
+                       <string>Domain</string>
+                      </property>
+                      <property name="textFormat">
+                       <enum>Qt::LogText</enum>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLineEdit" name="lineEdit_6">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>150</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item>
+                   <layout class="QHBoxLayout" name="horizontalLayout_18">
+                    <item>
+                     <widget class="QLabel" name="label_4">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>150</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                      <property name="frameShape">
+                       <enum>QFrame::Box</enum>
+                      </property>
+                      <property name="text">
+                       <string>Date</string>
+                      </property>
+                      <property name="textFormat">
+                       <enum>Qt::LogText</enum>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLineEdit" name="lineEdit_8">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>150</width>
+                        <height>16777215</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </item>
+              <item row="0" column="0">
+               <layout class="QVBoxLayout" name="verticalLayout_9">
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_28">
+                  <item>
+                   <widget class="QLabel" name="label_9">
+                    <property name="frameShape">
+                     <enum>QFrame::Box</enum>
+                    </property>
+                    <property name="text">
+                     <string>Submission title</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="lineEdit_2">
+                    <property name="readOnly">
+                     <bool>true</bool>
+                    </property>
+                    <property name="placeholderText">
+                     <string>Title from submission</string>
+                    </property>
+                    <property name="cursorMoveStyle">
+                     <enum>Qt::VisualMoveStyle</enum>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_29">
+                  <item>
+                   <widget class="QLabel" name="label_10">
+                    <property name="frameShape">
+                     <enum>QFrame::Box</enum>
+                    </property>
+                    <property name="text">
+                     <string>Article title</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="lineEdit_7">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="readOnly">
+                     <bool>true</bool>
+                    </property>
+                    <property name="placeholderText">
+                     <string>Title from article</string>
+                    </property>
+                    <property name="cursorMoveStyle">
+                     <enum>Qt::VisualMoveStyle</enum>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_14">
+             <item>
+              <widget class="QFrame" name="frame">
+               <property name="frameShape">
+                <enum>QFrame::StyledPanel</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Plain</enum>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_3">
+                <item row="1" column="0">
+                 <layout class="QVBoxLayout" name="verticalLayout_5">
+                  <item>
+                   <layout class="QHBoxLayout" name="horizontalLayout_5">
+                    <item>
+                     <widget class="QPushButton" name="pushButton">
+                      <property name="text">
+                       <string>Remove (RC)</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="pushButton_2">
+                      <property name="toolTip">
+                       <string>Hello</string>
+                      </property>
+                      <property name="text">
+                       <string>Remove (RBT)</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item>
+                   <layout class="QHBoxLayout" name="horizontalLayout_6">
+                    <item>
+                     <widget class="QPushButton" name="pushButton_4">
+                      <property name="text">
+                       <string>Remove (OOD)</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="pushButton_3">
+                      <property name="toolTip">
+                       <string>Hello</string>
+                      </property>
+                      <property name="text">
+                       <string>Remove (OT)</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item>
+                   <layout class="QHBoxLayout" name="horizontalLayout_7">
+                    <item>
+                     <widget class="QPushButton" name="pushButton_10">
+                      <property name="text">
+                       <string>Remove (404)</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="pushButton_9">
+                      <property name="toolTip">
+                       <string>Hello</string>
+                      </property>
+                      <property name="text">
+                       <string>Remove (PW)</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item>
+                   <layout class="QHBoxLayout" name="horizontalLayout_8">
+                    <item>
+                     <widget class="QPushButton" name="pushButton_6">
+                      <property name="text">
+                       <string>Remove (NSU)</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="pushButton_5">
+                      <property name="toolTip">
+                       <string>Hello</string>
+                      </property>
+                      <property name="text">
+                       <string>Remove (NS)</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item>
+                   <layout class="QHBoxLayout" name="horizontalLayout_9">
+                    <item>
+                     <widget class="QPushButton" name="pushButton_8">
+                      <property name="text">
+                       <string>Remove (AS)</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="pushButton_7">
+                      <property name="toolTip">
+                       <string>Hello</string>
+                      </property>
+                      <property name="text">
+                       <string>Remove (PB/V)</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item>
+                   <layout class="QHBoxLayout" name="horizontalLayout_10">
+                    <item>
+                     <widget class="QPushButton" name="pushButton_12">
+                      <property name="text">
+                       <string>Remove (NA/V/SC)</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="pushButton_11">
+                      <property name="toolTip">
+                       <string>Hello</string>
+                      </property>
+                      <property name="text">
+                       <string>Remove (Custom)</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                 </layout>
+                </item>
+                <item row="0" column="0">
+                 <layout class="QVBoxLayout" name="verticalLayout_6">
+                  <item>
+                   <layout class="QHBoxLayout" name="horizontalLayout_11">
+                    <item>
+                     <widget class="QPushButton" name="pushButton_13">
+                      <property name="text">
+                       <string>Approve</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="pushButton_16">
+                      <property name="text">
+                       <string>Report</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="lineEdit_3">
+                    <property name="placeholderText">
+                     <string>Report reason</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QTextEdit" name="textEdit_2"/>
+                </item>
+                <item row="4" column="0">
+                 <widget class="QLineEdit" name="lineEdit_5">
+                  <property name="placeholderText">
+                   <string>Megathread permalink</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <layout class="QHBoxLayout" name="horizontalLayout_4">
+                  <item>
+                   <widget class="QPushButton" name="pushButton_18">
+                    <property name="text">
+                     <string>Remove (point to megathread)</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="pushButton_20">
+                    <property name="text">
+                     <string>Remove (no reason)</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <layout class="QVBoxLayout" name="verticalLayout_7">
+               <item>
+                <widget class="QTableWidget" name="tableWidget">
+                 <property name="columnCount">
+                  <number>2</number>
+                 </property>
+                 <attribute name="horizontalHeaderStretchLastSection">
+                  <bool>true</bool>
+                 </attribute>
+                 <column>
+                  <property name="text">
+                   <string>Report</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>Count</string>
+                  </property>
+                 </column>
+                </widget>
+               </item>
+               <item>
+                <widget class="QFrame" name="frame_3">
+                 <property name="frameShape">
+                  <enum>QFrame::Box</enum>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Raised</enum>
+                 </property>
+                 <layout class="QGridLayout" name="gridLayout_6">
+                  <item row="0" column="0">
+                   <layout class="QHBoxLayout" name="horizontalLayout_23">
+                    <item>
+                     <widget class="QLabel" name="label_5">
+                      <property name="frameShape">
+                       <enum>QFrame::Box</enum>
+                      </property>
+                      <property name="text">
+                       <string>Author</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLineEdit" name="lineEdit_12"/>
+                    </item>
+                   </layout>
+                  </item>
+                  <item row="3" column="0">
+                   <widget class="QPushButton" name="pushButton_14">
+                    <property name="text">
+                     <string>Execute ban</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <layout class="QVBoxLayout" name="verticalLayout_14">
+                    <item>
+                     <layout class="QVBoxLayout" name="verticalLayout_15">
+                      <item>
+                       <layout class="QHBoxLayout" name="horizontalLayout_12">
+                        <item>
+                         <widget class="QLabel" name="label_7">
+                          <property name="frameShape">
+                           <enum>QFrame::Box</enum>
+                          </property>
+                          <property name="text">
+                           <string>Latest usernote</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QLineEdit" name="lineEdit_14">
+                          <property name="readOnly">
+                           <bool>true</bool>
+                          </property>
+                          <property name="placeholderText">
+                           <string/>
+                          </property>
+                         </widget>
+                        </item>
+                       </layout>
+                      </item>
+                      <item>
+                       <layout class="QHBoxLayout" name="horizontalLayout_13">
+                        <item>
+                         <widget class="QPushButton" name="pushButton_15">
+                          <property name="text">
+                           <string>View user profile</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QPushButton" name="pushButton_31">
+                          <property name="text">
+                           <string>Check submission ratio</string>
+                          </property>
+                         </widget>
+                        </item>
+                       </layout>
+                      </item>
+                      <item>
+                       <widget class="Line" name="line">
+                        <property name="orientation">
+                         <enum>Qt::Horizontal</enum>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <layout class="QHBoxLayout" name="horizontalLayout_25">
+                        <item>
+                         <layout class="QHBoxLayout" name="horizontalLayout_26">
+                          <item>
+                           <widget class="QPushButton" name="pushButton_29">
+                            <property name="text">
+                             <string>Calculate ban length/note</string>
+                            </property>
+                           </widget>
+                          </item>
+                          <item>
+                           <widget class="QLabel" name="label">
+                            <property name="frameShape">
+                             <enum>QFrame::Box</enum>
+                            </property>
+                            <property name="text">
+                             <string>Ban length</string>
+                            </property>
+                            <property name="alignment">
+                             <set>Qt::AlignCenter</set>
+                            </property>
+                           </widget>
+                          </item>
+                          <item>
+                           <widget class="QSpinBox" name="spinBox"/>
+                          </item>
+                         </layout>
+                        </item>
+                       </layout>
+                      </item>
+                     </layout>
+                    </item>
+                    <item>
+                     <layout class="QHBoxLayout" name="horizontalLayout_19">
+                      <item>
+                       <widget class="QLabel" name="label_8">
+                        <property name="frameShape">
+                         <enum>QFrame::Box</enum>
+                        </property>
+                        <property name="text">
+                         <string>Preset</string>
+                        </property>
+                        <property name="alignment">
+                         <set>Qt::AlignCenter</set>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QComboBox" name="comboBox"/>
+                      </item>
+                     </layout>
+                    </item>
+                    <item>
+                     <widget class="QLineEdit" name="lineEdit_4">
+                      <property name="placeholderText">
+                       <string>Ban note</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QTextEdit" name="textEdit_3"/>
+                    </item>
+                   </layout>
+                  </item>
+                  <item row="2" column="0">
+                   <layout class="QHBoxLayout" name="horizontalLayout_27">
+                    <item>
+                     <widget class="QCheckBox" name="checkBox_2">
+                      <property name="text">
+                       <string>Add usernote</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLineEdit" name="lineEdit_15">
+                      <property name="readOnly">
+                       <bool>false</bool>
+                      </property>
+                      <property name="placeholderText">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </item>
+         <item row="0" column="1">
+          <widget class="QFrame" name="frame_6">
+           <property name="frameShape">
+            <enum>QFrame::Box</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_9">
+            <item row="0" column="0">
+             <widget class="QWebView" name="webView">
+              <property name="url">
+               <url>
+                <string>about:blank</string>
+               </url>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="tab_2">
+        <attribute name="title">
+         <string>Comment</string>
+        </attribute>
+        <layout class="QGridLayout" name="gridLayout_4">
+         <item row="0" column="0">
+          <widget class="QFrame" name="frame_5">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>600</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::Box</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_12">
+            <item row="0" column="0">
+             <layout class="QVBoxLayout" name="verticalLayout_10">
+              <item>
+               <widget class="QLineEdit" name="lineEdit_38">
+                <property name="layoutDirection">
+                 <enum>Qt::LeftToRight</enum>
+                </property>
+                <property name="placeholderText">
+                 <string>Highlight text (comma-separated)</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QTextEdit" name="textEdit_6"/>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_20">
+                <item>
+                 <layout class="QVBoxLayout" name="verticalLayout_20">
+                  <item>
+                   <widget class="QPushButton" name="pushButton_59">
+                    <property name="text">
+                     <string>Open comment and context in browser</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <layout class="QVBoxLayout" name="verticalLayout_21">
+                    <item>
+                     <widget class="QTableWidget" name="tableWidget_8">
+                      <property name="columnCount">
+                       <number>2</number>
+                      </property>
+                      <attribute name="horizontalHeaderStretchLastSection">
+                       <bool>true</bool>
+                      </attribute>
+                      <column>
+                       <property name="text">
+                        <string>Report</string>
+                       </property>
+                      </column>
+                      <column>
+                       <property name="text">
+                        <string>Count</string>
+                       </property>
+                      </column>
+                     </widget>
+                    </item>
+                    <item>
+                     <layout class="QHBoxLayout" name="horizontalLayout_35">
+                      <item>
+                       <widget class="QPushButton" name="pushButton_34">
+                        <property name="text">
+                         <string>Approve</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="pushButton_60">
+                        <property name="text">
+                         <string>Remove</string>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </item>
+                    <item>
+                     <widget class="QPushButton" name="pushButton_61">
+                      <property name="text">
+                       <string>Report</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLineEdit" name="lineEdit_19">
+                      <property name="placeholderText">
+                       <string>Report reason</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QVBoxLayout" name="verticalLayout_30">
+                  <item>
+                   <widget class="QFrame" name="frame_13">
+                    <property name="frameShape">
+                     <enum>QFrame::Box</enum>
+                    </property>
+                    <property name="frameShadow">
+                     <enum>QFrame::Raised</enum>
+                    </property>
+                    <layout class="QGridLayout" name="gridLayout_18">
+                     <item row="2" column="0">
+                      <layout class="QVBoxLayout" name="verticalLayout_31">
+                       <item>
+                        <layout class="QVBoxLayout" name="verticalLayout_32">
+                         <item>
+                          <layout class="QHBoxLayout" name="horizontalLayout_68">
+                           <item>
+                            <widget class="QLabel" name="label_30">
+                             <property name="frameShape">
+                              <enum>QFrame::Box</enum>
+                             </property>
+                             <property name="text">
+                              <string>Latest usernote</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item>
+                            <widget class="QLineEdit" name="lineEdit_39">
+                             <property name="readOnly">
+                              <bool>true</bool>
+                             </property>
+                             <property name="placeholderText">
+                              <string/>
+                             </property>
+                            </widget>
+                           </item>
+                          </layout>
+                         </item>
+                         <item>
+                          <layout class="QHBoxLayout" name="horizontalLayout_69">
+                           <item>
+                            <widget class="QPushButton" name="pushButton_62">
+                             <property name="text">
+                              <string>View user profile</string>
+                             </property>
+                            </widget>
+                           </item>
+                           <item>
+                            <widget class="QPushButton" name="pushButton_63">
+                             <property name="text">
+                              <string>Check submission ratio</string>
+                             </property>
+                            </widget>
+                           </item>
+                          </layout>
+                         </item>
+                         <item>
+                          <widget class="Line" name="line_7">
+                           <property name="orientation">
+                            <enum>Qt::Horizontal</enum>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <layout class="QHBoxLayout" name="horizontalLayout_70">
+                           <item>
+                            <layout class="QHBoxLayout" name="horizontalLayout_71">
+                             <item>
+                              <widget class="QPushButton" name="pushButton_64">
+                               <property name="text">
+                                <string>Calculate ban length/note</string>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QLabel" name="label_31">
+                               <property name="frameShape">
+                                <enum>QFrame::Box</enum>
+                               </property>
+                               <property name="text">
+                                <string>Ban length</string>
+                               </property>
+                               <property name="alignment">
+                                <set>Qt::AlignCenter</set>
+                               </property>
+                              </widget>
+                             </item>
+                             <item>
+                              <widget class="QSpinBox" name="spinBox_7"/>
+                             </item>
+                            </layout>
+                           </item>
+                          </layout>
+                         </item>
+                        </layout>
+                       </item>
+                       <item>
+                        <layout class="QHBoxLayout" name="horizontalLayout_72">
+                         <item>
+                          <widget class="QLabel" name="label_32">
+                           <property name="frameShape">
+                            <enum>QFrame::Box</enum>
+                           </property>
+                           <property name="text">
+                            <string>Preset</string>
+                           </property>
+                           <property name="alignment">
+                            <set>Qt::AlignCenter</set>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QComboBox" name="comboBox_7"/>
+                         </item>
+                        </layout>
+                       </item>
+                       <item>
+                        <widget class="QLineEdit" name="lineEdit_40">
+                         <property name="placeholderText">
+                          <string>Ban note</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QTextEdit" name="textEdit_10"/>
+                       </item>
+                      </layout>
+                     </item>
+                     <item row="1" column="0">
+                      <layout class="QHBoxLayout" name="horizontalLayout_73">
+                       <item>
+                        <widget class="QLabel" name="label_33">
+                         <property name="frameShape">
+                          <enum>QFrame::Box</enum>
+                         </property>
+                         <property name="text">
+                          <string>Author</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLineEdit" name="lineEdit_41"/>
+                       </item>
+                      </layout>
+                     </item>
+                     <item row="4" column="0">
+                      <widget class="QPushButton" name="pushButton_65">
+                       <property name="text">
+                        <string>Execute ban</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="3" column="0">
+                      <layout class="QHBoxLayout" name="horizontalLayout_74">
+                       <item>
+                        <widget class="QCheckBox" name="checkBox_8">
+                         <property name="text">
+                          <string>Add usernote</string>
+                         </property>
+                        </widget>
+                       </item>
+                       <item>
+                        <widget class="QLineEdit" name="lineEdit_42">
+                         <property name="readOnly">
+                          <bool>false</bool>
+                         </property>
+                         <property name="placeholderText">
+                          <string/>
+                         </property>
+                        </widget>
+                       </item>
+                      </layout>
+                     </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item>
+                   <layout class="QHBoxLayout" name="horizontalLayout_75"/>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QFrame" name="frame_7">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::Box</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_10">
+            <item row="0" column="0">
+             <widget class="QWebView" name="webView_2">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>1512515</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="url">
+               <url>
+                <string>about:blank</string>
+               </url>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1579</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QWebView</class>
+   <extends>QWidget</extends>
+   <header>QtWebKit/QWebView</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
